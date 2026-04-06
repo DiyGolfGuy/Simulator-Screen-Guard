@@ -5,14 +5,13 @@
 <h1 align="center">BA Custom ScreenGuard</h1>
 
 <p align="center">
-  <strong>Click Blocker, Program Watchdog & Auto-Recovery Tool</strong><br>
+  <strong>Click Blocker, Program Watchdog & Auto-Recovery Tool for Windows</strong><br>
   Built by <a href="mailto:bacustomproducts@gmail.com">BA Custom Products</a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/platform-Windows-lightgrey" alt="Platform">
-  <img src="https://img.shields.io/badge/AutoHotkey-v1.1-green" alt="AutoHotkey">
   <img src="https://img.shields.io/badge/license-MIT-orange" alt="License">
 </p>
 
@@ -26,16 +25,24 @@ It was originally built for golf simulator facilities where customers would acci
 
 ---
 
+## Download
+
+Head to the [**Releases**](../../releases) page and download the latest `BACustomScreenGuard.exe`.
+
+One file. No installation required. Just run it.
+
+---
+
 ## Features
 
 ### Click Blocking
 - Define up to **4 rectangular zones** on screen where clicks are blocked
 - Capture zones by clicking two opposite corners — works over any window
 - Customizable warning message appears when a blocked click is attempted
-- Uses raw screen coordinates — completely independent of which application is in front
+- Works regardless of which application is in front
 
 ### Program Watchdog
-- Monitors any `.exe` process every 2 seconds
+- Monitors any program every 2 seconds
 - If the program is closed, ScreenGuard **immediately displays a recovery message**, relaunches the program, and replays your recorded click sequence to restore it to the correct screen
 - Recovery message stays visible throughout the entire restore process
 
@@ -55,29 +62,8 @@ It was originally built for golf simulator facilities where customers would acci
 - **Auto-start protection** — optionally starts protecting immediately on launch
 - **Silent startup** — optionally runs with no visible window (tray icon only)
 - **One-click Windows Startup** — adds itself to the Windows Startup folder
-- **Hidden configuration** — settings stored in `%AppData%\BA Custom Products\ScreenGuard\` where customers never see them
+- Settings stored where customers never see them
 - Closing the window while protection is active **hides to tray** instead of exiting
-
----
-
-## Installation
-
-### Option 1: Run the Script Directly
-1. Install [AutoHotkey v1.1](https://www.autohotkey.com/)
-2. Download `BACustomScreenGuard.ahk`
-3. Double-click to run
-
-### Option 2: Compile to Standalone .exe (Recommended)
-1. Install [AutoHotkey v1.1](https://www.autohotkey.com/)
-2. Open **Ahk2Exe** from your Start Menu
-3. Set **Source** to `BACustomScreenGuard.ahk`
-4. Set **Custom Icon** to `BACustomScreenGuard.ico`
-5. Click **Convert**
-6. Deploy the resulting `.exe` to any Windows PC — no AutoHotkey install required on target machines
-
-The `.exe` is fully self-contained. The icon is embedded and all code is baked in. One file is all you need.
-
-> **Note:** The compiled `.ahk` files include `@Ahk2Exe` directives that automatically set the product name, company name, version, and description in the `.exe` file properties.
 
 ---
 
@@ -85,7 +71,7 @@ The `.exe` is fully self-contained. The icon is embedded and all code is baked i
 
 ### Quick Start
 1. **Block Zones** — Go to the Block Zones tab and click Capture for each area you want to block (like close buttons). Click two opposite corners to define the rectangle.
-2. **Watchdog** — Go to the Watchdog tab, click Browse to select the `.exe` you want to keep running, set the relaunch delay, and check Enable Watchdog.
+2. **Watchdog** — Go to the Watchdog tab, click Browse to select the program you want to keep running, set the relaunch delay, and check Enable Watchdog.
 3. **Click Recorder** — Go to the Click Recorder tab and click Start Recording. Click through the steps needed to restore the program to the correct screen. Right-click or press Escape when done.
 4. **Start Protection** — Click the Start Protection button. ScreenGuard minimizes to the system tray.
 
@@ -109,7 +95,7 @@ Double-clicking the tray icon also opens the settings window.
 For deploying to kiosk PCs, simulator stations, or customer facilities:
 
 ### Setup Checklist
-1. Copy `BACustomScreenGuard.exe` to a permanent location (e.g. `C:\TURF\`)
+1. Copy `BACustomScreenGuard.exe` to a permanent location on the PC
 2. Run the `.exe` and configure your block zones, watchdog program, and click sequence
 3. Go to the **Settings** tab:
    - Check **Start protection automatically**
@@ -118,64 +104,40 @@ For deploying to kiosk PCs, simulator stations, or customer facilities:
 4. Click **Start Protection** to verify everything works
 5. Reboot the PC to confirm it starts silently and protection activates automatically
 
-### Windows Defender Exclusion
-Compiled AutoHotkey scripts use mouse hooks which Windows Defender may flag as suspicious. This is a false positive. Add an exclusion before deploying:
+### Windows Defender
+Windows Defender may flag ScreenGuard on first run because it uses low-level mouse monitoring to block clicks. This is expected behavior — add an exclusion before deploying:
 
 ```powershell
-# Run as Administrator
-Add-MpPreference -ExclusionPath "C:\TURF\BACustomScreenGuard.exe"
+# Run as Administrator - update the path to match your install location
+Add-MpPreference -ExclusionPath "C:\YourFolder\BACustomScreenGuard.exe"
 ```
 
 Or manually: **Windows Security** > **Virus & threat protection** > **Manage settings** > **Exclusions** > **Add or remove exclusions** > add the `.exe` file or its folder.
 
----
-
-## Configuration
-
-Settings are stored automatically in:
+### Resetting Configuration
+To reset all settings back to defaults, delete the configuration folder:
 ```
-%AppData%\BA Custom Products\ScreenGuard\config.ini
+%AppData%\BA Custom Products\ScreenGuard\
 ```
-
-This is the standard Windows location for application settings. The file is created automatically on first use and updated every time a setting changes. Users never need to interact with it directly.
-
-To reset all settings, delete the `config.ini` file or the entire `ScreenGuard` folder in AppData.
 
 ---
 
-## Technical Details
+## Requirements
 
 | Detail | Info |
 |---|---|
-| Platform | Windows 7 / 8 / 10 / 11 |
-| Language | AutoHotkey v1.1 |
-| Architecture | 32-bit (runs on both 32 and 64-bit Windows) |
-| Dependencies | None (standalone `.exe`) |
-| Config Location | `%AppData%\BA Custom Products\ScreenGuard\` |
-| Click Blocking Method | `#If` context-sensitive hotkeys (no mouse state desync) |
-| Coordinate System | `CoordMode Screen` — raw screen pixels, window-independent |
-| Resolution Handling | Percentage-based per monitor with live recalculation |
-| Watchdog Interval | 2 seconds |
-
----
-
-## Repository Contents
-
-```
-BACustomScreenGuard.ahk        # Source script
-BACustomScreenGuard.ico         # Application icon (multi-size: 16-256px)
-BACustomScreenGuard_preview.png # Icon preview image
-README.md                       # This file
-LICENSE                         # License file
-```
+| Operating System | Windows 7 / 8 / 10 / 11 |
+| Dependencies | None — single standalone `.exe` |
+| Install Required | No |
+| Admin Required | Only for the Windows Defender exclusion |
 
 ---
 
 ## About BA Custom Products
 
-BA Custom Products builds **white-label software and hardware solutions for golf simulator facilities**. Our products include booking systems, league trackers, and hardware bundles — all designed to be self-hosted so facilities own their data without monthly SaaS fees.
+BA Custom Products builds **white-label software and hardware solutions for golf simulator facilities**. Our products include booking and session management systems, league trackers, and pre-configured hardware bundles — all designed to be self-hosted so facilities own their data without monthly SaaS fees.
 
-**Contact:**
+**Get in touch:**
 - Email: [bacustomproducts@gmail.com](mailto:bacustomproducts@gmail.com)
 - Phone: (218) 684-3290
 
@@ -184,3 +146,4 @@ BA Custom Products builds **white-label software and hardware solutions for golf
 ## License
 
 MIT License — see [LICENSE](LICENSE) for details.
+
