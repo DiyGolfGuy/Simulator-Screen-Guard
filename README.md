@@ -1,149 +1,58 @@
-<p align="center">
-  <img src="BACustomScreenGuard_preview.png" alt="BA Custom ScreenGuard" width="150">
-</p>
+# BA Custom ScreenGuard
 
-<h1 align="center">BA Custom ScreenGuard</h1>
+Click blocker, program watchdog, and auto-recovery tool for Windows. Built by BA Custom Products.
 
-<p align="center">
-  <strong>Click Blocker, Program Watchdog & Auto-Recovery Tool for Windows</strong><br>
-  Built by <a href="mailto:bacustomproducts@gmail.com">BA Custom Products</a>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="Version">
-  <img src="https://img.shields.io/badge/platform-Windows-lightgrey" alt="Platform">
-  <img src="https://img.shields.io/badge/license-MIT-orange" alt="License">
-</p>
-
----
-
-## What It Does
-
-BA Custom ScreenGuard is a lightweight Windows utility designed for **kiosk environments, simulator stations, and unattended PCs** where you need to prevent users from closing critical programs or clicking areas they shouldn't.
-
-It was originally built for golf simulator facilities where customers would accidentally (or intentionally) close the simulator software, requiring staff to walk over and restart everything. ScreenGuard eliminates that problem entirely.
-
----
+Built for golf simulator facilities and kiosk environments where you need to stop users from closing programs or clicking things they shouldn't. When someone closes a watched program, ScreenGuard relaunches it and clicks it back to the right screen automatically.
 
 ## Download
 
-Head to the [**Releases**](../../releases) page and download the latest `BACustomScreenGuard.exe`.
+Grab the latest `.exe` from the [Releases](../../releases) page. One file, no install needed.
 
-One file. No installation required. Just run it.
+The full source code (`BACustomScreenGuard.ahk`) is included in this repo if you want to review it or modify it. It's an AutoHotkey v1.1 script. To compile your own `.exe`, right-click the `.ahk` file and choose "Compile Script" (requires AutoHotkey v1.1 installed).
 
----
+## What It Does
 
-## Features
+**Click Blocking** — Define up to 4 rectangular zones on screen where clicks get blocked. Click two corners to set each zone. Works over any window on any monitor. Shows a customizable warning message when someone clicks a blocked area.
 
-### Click Blocking
-- Define up to **4 rectangular zones** on screen where clicks are blocked
-- Capture zones by clicking two opposite corners — works over any window
-- Customizable warning message appears when a blocked click is attempted
-- Works regardless of which application is in front
+**Program Watchdog** — Monitors a program every 2 seconds. If it gets closed, a recovery message pops up immediately, the program gets relaunched, and your recorded click sequence replays to get it back to the right screen.
 
-### Program Watchdog
-- Monitors any program every 2 seconds
-- If the program is closed, ScreenGuard **immediately displays a recovery message**, relaunches the program, and replays your recorded click sequence to restore it to the correct screen
-- Recovery message stays visible throughout the entire restore process
+**Click Recorder** — Record a series of clicks with the exact timing between them. These replay automatically after the watchdog relaunches a program. If you waited 3 seconds between two clicks during recording, the playback waits 3 seconds too.
 
-### Click Sequence Recorder
-- Record a series of mouse clicks with **exact real-time delays** between them
-- When the watchdog relaunches a program, the recorded clicks are replayed automatically with your original timing
-- Lets you navigate the program back to the correct state hands-free
+**Multi-Monitor** — Works with multiple monitors at different resolutions. Coordinates are stored as percentages of each monitor so everything recalculates if the resolution changes or monitors get rearranged.
 
-### Multi-Monitor Support
-- Full support for **multiple monitors at different resolutions**
-- Coordinates are stored as a **percentage of each monitor's dimensions**, not as absolute pixels
-- If resolution changes or monitors are rearranged, positions recalculate automatically
-- Each capture records which physical monitor it belongs to
+**Silent Mode** — Can start protection automatically on launch with no visible window. Settings auto-save so nothing is lost on reboot. One-click button to add itself to Windows Startup. Closing the window while protected just hides to the system tray.
 
-### Silent Deployment
-- **Auto-save** — all settings save automatically as you configure them
-- **Auto-start protection** — optionally starts protecting immediately on launch
-- **Silent startup** — optionally runs with no visible window (tray icon only)
-- **One-click Windows Startup** — adds itself to the Windows Startup folder
-- Settings stored where customers never see them
-- Closing the window while protection is active **hides to tray** instead of exiting
+## Setup
 
----
+1. Run `BACustomScreenGuard.exe`
+2. **Block Zones tab** — Capture the areas you want to block (like close buttons)
+3. **Watchdog tab** — Browse to the `.exe` you want to keep running, set a delay, enable it
+4. **Click Recorder tab** — Record the clicks needed to navigate the program back after a relaunch
+5. **Settings tab** — Check "Start protection automatically" and "Run silently" if you want hands-off operation. Click "Add to Windows Startup" if you want it to survive reboots.
+6. Hit Start Protection
 
-## Usage
+To open the settings window later, right-click the ScreenGuard icon in the system tray (bottom-right of taskbar near the clock).
 
-### Quick Start
-1. **Block Zones** — Go to the Block Zones tab and click Capture for each area you want to block (like close buttons). Click two opposite corners to define the rectangle.
-2. **Watchdog** — Go to the Watchdog tab, click Browse to select the program you want to keep running, set the relaunch delay, and check Enable Watchdog.
-3. **Click Recorder** — Go to the Click Recorder tab and click Start Recording. Click through the steps needed to restore the program to the correct screen. Right-click or press Escape when done.
-4. **Start Protection** — Click the Start Protection button. ScreenGuard minimizes to the system tray.
+## Windows Defender
 
-### Settings Tab
-- **Start protection automatically** — Protection activates as soon as ScreenGuard launches
-- **Run silently on startup** — No window appears; runs as a tray icon only
-- **Add to Windows Startup** — One click to add/remove from the Windows Startup folder
-
-### System Tray
-When running, ScreenGuard lives in the system tray (bottom-right of the taskbar near the clock). Right-click the icon to:
-- **Show BA Custom ScreenGuard** — Open the settings window
-- **Toggle Protection** — Turn protection on/off
-- **Exit** — Fully close the application
-
-Double-clicking the tray icon also opens the settings window.
-
----
-
-## Deployment Guide
-
-For deploying to kiosk PCs, simulator stations, or customer facilities:
-
-### Setup Checklist
-1. Copy `BACustomScreenGuard.exe` to a permanent location on the PC
-2. Run the `.exe` and configure your block zones, watchdog program, and click sequence
-3. Go to the **Settings** tab:
-   - Check **Start protection automatically**
-   - Check **Run silently on startup**
-   - Click **Add to Windows Startup**
-4. Click **Start Protection** to verify everything works
-5. Reboot the PC to confirm it starts silently and protection activates automatically
-
-### Windows Defender
-Windows Defender may flag ScreenGuard on first run because it uses low-level mouse monitoring to block clicks. This is expected behavior — add an exclusion before deploying:
+Defender will probably flag this on first run because it hooks mouse input to block clicks. Add an exclusion:
 
 ```powershell
-# Run as Administrator - update the path to match your install location
 Add-MpPreference -ExclusionPath "C:\YourFolder\BACustomScreenGuard.exe"
 ```
 
-Or manually: **Windows Security** > **Virus & threat protection** > **Manage settings** > **Exclusions** > **Add or remove exclusions** > add the `.exe` file or its folder.
+Or do it manually through Windows Security > Virus & threat protection > Exclusions.
 
-### Resetting Configuration
-To reset all settings back to defaults, delete the configuration folder:
+## Reset
+
+Delete the config folder to start fresh:
 ```
 %AppData%\BA Custom Products\ScreenGuard\
 ```
 
----
+## BA Custom Products
 
-## Requirements
+We build white-label software and hardware for golf simulator facilities — booking systems, league trackers, and pre-configured hardware bundles. Self-hosted, no monthly fees.
 
-| Detail | Info |
-|---|---|
-| Operating System | Windows 7 / 8 / 10 / 11 |
-| Dependencies | None — single standalone `.exe` |
-| Install Required | No |
-| Admin Required | Only for the Windows Defender exclusion |
-
----
-
-## About BA Custom Products
-
-BA Custom Products builds **white-label software and hardware solutions for golf simulator facilities**. Our products include booking and session management systems, league trackers, and pre-configured hardware bundles — all designed to be self-hosted so facilities own their data without monthly SaaS fees.
-
-**Get in touch:**
-- Email: [bacustomproducts@gmail.com](mailto:bacustomproducts@gmail.com)
-- Phone: (218) 684-3290
-
----
-
-## License
-
-MIT License — see [LICENSE](LICENSE) for details.
+bacustomproducts@gmail.com | (218) 684-3290
 
